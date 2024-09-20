@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecommerce.event.display.dao.EventDisplayMapper">
+
+    <resultMap id="eventExhibitionMap" type="com.ecommerce.event.display.model.response.EventExhibitionResDto">
+        <result property="evtId"           column="EVT_ID"/>
+        <result property="exhibitionNo"    column="EXHIBITION_NO"/>
+        <result property="dispSeq"         column="DISP_SEQ"/>
+        <result property="dispYn"          column="DISP_YN"/>
+        <result property="titile"          column="TITLE"/>
+        <result property="bgColor"         column="BG_COLOR"/>
+        <result property="bgImgPath"       column="BG_IMG_PATH"/>
+
+        <collection property="componentList" ofType="com.ecommerce.event.display.model.response.EventComponentResDto">
+            <result property="dpComponentNo" column="DP_COMPONENT_NO"/>
+            <result property="componentType" column="COMPONENT_TYPE"/>
+            <result property="componentCd"   column="COMPONENT_CD"/>
+            <result property="dispYn"        column="DISP_YN"/>
+            <result property="dispSeq"       column="DISP_SEQ"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectEventComponentList"
+            parameterType="com.ecommerce.event.display.model.request.EventExhibitionReqDto" resultMap="eventExhibitionMap">
+        SELECT
+            EE.EVT_ID,
+            EE.EXHIBITION_NO,
+            EE.DISP_SEQ,
+            EE.DISP_YN,
+            EE.TITLE,
+            EE.BG_COLOR,
+            EE.BG_IMG_PATH,
+            EDC.DP_COMPONENT_NO,
+            EDC.COMPONENT_TYPE,
+            EDC.COMPONENT_CD,
+            EDC.DISP_YN,
+            EDC.DISP_SEQ
+        FROM
+            EVT_EXHIBITION EE
+                LEFT JOIN EVT_DP_COMPONENT EDC ON EE.EXHIBITION_NO = EDC.EXHIBITION_NO
+        WHERE 1=1
+          AND EE.EVT_ID = #{evtId}
+          AND EE.DISP_YN = 1
+          AND EDC.DISP_YN = 1
+        ORDER BY EE.DISP_SEQ, EDC.DISP_SEQ
+    </select>
+
+    <select id="selectEventBannerList"
+            parameterType="com.ecommerce.event.display.model.request.EventContentsReqDto" resultType="com.ecommerce.event.display.model.response.EventDisplayBannerDto">
+       SELECT
+           DP_COMPONENT_NO,
+           EVT_ID,
+           DP_BANNER_NO,
+           BANNER_IMG_PATH,
+           LINK_URL,
+           DISP_YN,
+           DISP_SEQ
+       FROM EVT_DP_BANNER
+       WHERE 1=1
+           AND DP_COMPONENT_NO = #{dpComponentNo}
+       ORDER BY DISP_SEQ
+    </select>
+
+    <select id="selectEventProductList"
+            parameterType="com.ecommerce.event.display.model.request.EventContentsReqDto" resultType="com.ecommerce.event.display.model.response.EventDisplayProductDto">
+        SELECT
+            DP_COMPONENT_NO,
+            EVT_ID,
+            DP_BANNER_NO,
+            PRODUCT_ID,
+            DISP_YN,
+            DISP_SEQ
+        FROM EVT_DP_PRODUCT
+        WHERE 1=1
+          AND DP_COMPONENT_NO = #{dpComponentNo}
+        ORDER BY DISP_SEQ
+    </select>
+
+    <select id="selectEventCouponList"
+            parameterType="com.ecommerce.event.display.model.request.EventContentsReqDto" resultType="com.ecommerce.event.display.model.response.EventDisplayCouponDto">
+        SELECT
+            DP_COMPONENT_NO,
+            EVT_ID,
+            DP_BANNER_NO,
+            COUPON_ID,
+            CLICK_ACTION,
+            DISP_YN,
+            DISP_SEQ
+        FROM EVT_DP_COUPON
+        WHERE 1=1
+          AND DP_COMPONENT_NO = #{dpComponentNo}
+        ORDER BY DISP_SEQ
+    </select>
+</mapper>
