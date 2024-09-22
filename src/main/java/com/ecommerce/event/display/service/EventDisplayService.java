@@ -2,15 +2,14 @@ package com.ecommerce.event.display.service;
 
 
 import com.ecommerce.event.display.dao.EventDisplayMapper;
-import com.ecommerce.event.display.model.ComponentType;
 import com.ecommerce.event.display.model.EventContent;
 import com.ecommerce.event.display.model.request.EventComponentReqDto;
 import com.ecommerce.event.display.model.request.EventContentsReqDto;
 import com.ecommerce.event.display.model.request.EventExhibitionReqDto;
+import com.ecommerce.event.display.model.response.EventComponentResDto;
 import com.ecommerce.event.display.model.response.EventExhibitionResDto;
 import com.ecommerce.event.exception.exceptions.NoConentsTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -63,9 +62,8 @@ public class EventDisplayService {
         return contentKey;
     }
 
-
     public List<EventExhibitionResDto> getEventExhibitionList(EventExhibitionReqDto eventExhibitionReqDto){
-        return eventDisplayMapper.selectEventComponentList(eventExhibitionReqDto);
+        return eventDisplayMapper.selectEventExhibitionList(eventExhibitionReqDto);
     }
 
 
@@ -87,5 +85,34 @@ public class EventDisplayService {
         }
 
         return eventContents;
+    }
+
+    public List<List<EventContent>> getEventExhibitionContents(Long exhibitionNo){
+        List<EventComponentResDto> components = eventDisplayMapper.selectEventComponentList(exhibitionNo);
+
+        List<List<EventContent>> exhbitionContentsList = new ArrayList<>();
+        Integer componentType = null;
+
+        for(EventComponentResDto component : components){
+            componentType = component.getComponentType();
+            EventContentsReqDto eventContentsReqDto = EventContentsReqDto.builder()
+                    .dpComponentNo(component.getDpComponentNo())
+                    .build();
+
+            if(BANNER.getComponentType().equals(componentType)){
+                exhbitionContentsList.add(eventDisplayMapper.selectEventBannerList(eventContentsReqDto));
+            }
+            else if(PRODUCT.getComponentType().equals(componentType)){
+                exhbitionContentsList.add(eventDisplayMapper.selectEventBannerList(eventContentsReqDto));
+            }
+            else if(COUPON.getComponentType().equals(componentType)){
+                exhbitionContentsList.add(eventDisplayMapper.selectEventBannerList(eventContentsReqDto));
+            }
+            else {
+                throw new NoConentsTypeException("Wrong Component Type");
+            }
+        }
+
+        return exhbitionContentsList;
     }
 }

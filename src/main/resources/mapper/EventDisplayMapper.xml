@@ -22,7 +22,7 @@
         </collection>
     </resultMap>
 
-    <select id="selectEventComponentList"
+    <select id="selectEventExhibitionList"
             parameterType="com.ecommerce.event.display.model.request.EventExhibitionReqDto" resultMap="eventExhibitionMap">
         SELECT
             EE.EVT_ID,
@@ -45,6 +45,23 @@
           AND EE.DISP_YN = 1
           AND EDC.DISP_YN = 1
         ORDER BY EE.DISP_SEQ, EDC.DISP_SEQ
+    </select>
+
+    <select id="selectEventComponentList"
+            parameterType="Long" resultType="com.ecommerce.event.display.model.response.EventComponentResDto">
+        SELECT
+            DP_COMPONENT_NO,
+            COMPONENT_TYPE,
+            COMPONENT_CD,
+            DISP_YN,
+            DISP_SEQ
+        FROM
+            EVT_DP_COMPONENT
+        WHERE 1=1
+          AND EXHIBITION_NO = #{exhibitionNo}
+          AND DISP_YN = 1
+          AND DISP_YN = 1
+        ORDER BY DISP_SEQ
     </select>
 
     <select id="selectEventBannerList"

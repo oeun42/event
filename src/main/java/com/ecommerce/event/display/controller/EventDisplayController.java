@@ -28,7 +28,7 @@ public class EventDisplayController {
     전시구좌 생성
      */
     @PostMapping("/display/exhibition")
-    public ResponseEntity<?> createEventExhibition(@Valid @RequestBody EventExhibitionReqDto eventExhibitionReqDto){
+    public ResponseEntity<Long> createEventExhibition(@Valid @RequestBody EventExhibitionReqDto eventExhibitionReqDto){
 
         return ResponseEntity.ok(eventDisplayService.createEventExhibition(eventExhibitionReqDto));
     }
@@ -37,7 +37,7 @@ public class EventDisplayController {
     컴포넌트 생성
     */
     @PostMapping("/display/component")
-    public ResponseEntity<?> createEventComponent(@Valid @RequestBody EventComponentReqDto eventComponentReqDto){
+    public ResponseEntity<Long> createEventComponent(@Valid @RequestBody EventComponentReqDto eventComponentReqDto){
 
 
         return ResponseEntity.ok(eventDisplayService.createEventComponent(eventComponentReqDto));
@@ -47,14 +47,14 @@ public class EventDisplayController {
     컨텐츠 생성
      */
     @PostMapping("/display/content")
-    public ResponseEntity<?> createEventContent(@Valid @RequestBody EventContentsReqDto eventContentsReqDto){
+    public ResponseEntity<Long> createEventContent(@Valid @RequestBody EventContentsReqDto eventContentsReqDto){
 
 
         return ResponseEntity.ok(eventDisplayService.createEventContent(eventContentsReqDto));
     }
 
     /*
-    전시 컨텐츠 조회
+    전시 컨텐츠 개별 조회
      */
     @GetMapping("/display/content")
     public ResponseEntity<List<EventContent>> getEventComponentContents(@RequestParam(value = "dpComponentNo")Long dpComponentNo,
@@ -65,6 +65,17 @@ public class EventDisplayController {
                 .build();
 
         return ResponseEntity.ok(eventDisplayService.getEventComponentContents(contentsReqDto));
+
+    }
+
+    /*
+      전시 컨텐츠 구좌별 조회
+    */
+    @GetMapping("/display/exhibition/content")
+    public ResponseEntity<List<List<EventContent>>> getEventExhibitionContents(@RequestParam(value = "exhibitionNo")Long exhibitionNo
+                                                                       ) throws Exception {
+
+        return ResponseEntity.ok(eventDisplayService.getEventExhibitionContents(exhibitionNo));
 
     }
 
