@@ -93,4 +93,123 @@
           AND DP_COMPONENT_NO = #{dpComponentNo}
         ORDER BY DISP_SEQ
     </select>
+
+
+    <insert id="insertEventExhibition" parameterType="com.ecommerce.event.display.model.request.EventExhibitionReqDto"
+            useGeneratedKeys="true" keyProperty="exhibitionNo" keyColumn="EXHIBITION_NO">
+        INSERT INTO EVT_EXHIBITION(EVT_ID,
+                                   EXHIBITION_NO,
+                                   DISP_SEQ,
+                                   DISP_YN,
+                                   CREATE_DT,
+                                   CREATE_ID,
+                                   UPDATE_DT,
+                                   UPDATE_ID)
+        VALUES (#{evtId},
+                SEQ_EVT_EXHIBITION.NEXTVAL,
+                #{dispSeq},
+                #{dispYn},
+                SYSDATE,
+                #{createId},
+                SYSDATE,
+                #{updateId})
+    </insert>
+    <insert id="insertEventComponent" parameterType="com.ecommerce.event.display.model.request.EventComponentReqDto"
+            useGeneratedKeys="true" keyProperty="dpComponentNo" keyColumn="DP_COMPONENT_NO">
+        INSERT INTO EVT_DP_COMPONENT(EVT_ID,
+                                    DP_COMPONENT_NO,
+                                    COMPONENT_TYPE,
+                                    COMPONENT_CD,
+                                    DISP_SEQ,
+                                    DISP_YN,
+                                    CREATE_DT,
+                                    CREATE_ID,
+                                    UPDATE_DT,
+                                    UPDATE_ID)
+        VALUES (#{evtId},
+                SEQ_EVT_COMPONENT.NEXTVAL,
+                #{componentType},
+                #{componentCd},
+                #{dispSeq},
+                #{dispYn},
+                SYSDATE,
+                #{createId},
+                SYSDATE,
+                #{updateId})
+    </insert>
+    <insert id="insertEventBanner" parameterType="com.ecommerce.event.display.model.request.EventContentsReqDto"
+            useGeneratedKeys="true" keyProperty="dpBannerNo" keyColumn="DP_BANNER_NO">>
+        INSERT INTO EVT_DP_BANNER(EVT_ID,
+                                DP_COMPONENT_NO,
+                                DP_BANNER_NO,
+                                BANNER_IMG_PATH,
+                                LINK_URL,
+                                DISP_SEQ,
+                                DISP_YN,
+                                CREATE_DT,
+                                CREATE_ID,
+                                UPDATE_DT,
+                                UPDATE_ID)
+        VALUES (#{evtId},
+                #{dpComponentNo},
+                SEQ_EVT_BANNER.NEXTVAL,
+                #{bannerImgPath},
+                #{linkUrl},
+                #{dispSeq},
+                #{dispYn},
+                SYSDATE,
+                #{createId},
+                SYSDATE,
+                #{updateId})
+    </insert>
+
+    <insert id="insertEventProduct" parameterType="com.ecommerce.event.display.model.request.EventContentsReqDto"
+            useGeneratedKeys="true" keyProperty="dpProductNo" keyColumn="DP_PRODUCT_NO">
+        INSERT INTO EVT_DP_PRODUCT(EVT_ID,
+                                  DP_COMPONENT_NO,
+                                  DP_PRODUCT_NO,
+                                  PRODUCT_ID,
+                                  DISP_SEQ,
+                                  DISP_YN,
+                                  CREATE_DT,
+                                  CREATE_ID,
+                                  UPDATE_DT,
+                                  UPDATE_ID)
+        VALUES (#{evtId},
+                #{dpComponentNo},
+                SEQ_EVT_PRODUCT.NEXTVAL,
+                #{productId},
+                #{dispSeq},
+                #{dispYn},
+                SYSDATE,
+                #{createId},
+                SYSDATE,
+                #{updateId})
+    </insert>
+
+    <insert id="insertEventCoupon" parameterType="com.ecommerce.event.display.model.request.EventContentsReqDto"
+            useGeneratedKeys="true" keyProperty="dpCouponNo" keyColumn="DP_COUPON_NO">
+        INSERT INTO EVT_DP_BANNER(EVT_ID,
+                                  DP_COMPONENT_NO,
+                                  DP_COUPON_NO,
+                                  COUPON_ID,
+                                  CLICK_ACTION,
+                                  DISP_SEQ,
+                                  DISP_YN,
+                                  CREATE_DT,
+                                  CREATE_ID,
+                                  UPDATE_DT,
+                                  UPDATE_ID)
+        VALUES (#{evtId},
+                #{dpComponentNo},
+                SEQ_EVT_COUPON.NEXTVAL,
+                #{couponId},
+                #{clickAction},
+                #{dispSeq},
+                #{dispYn},
+                SYSDATE,
+                #{createId},
+                SYSDATE,
+                #{updateId})
+    </insert>
 </mapper>

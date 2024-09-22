@@ -2,15 +2,15 @@ package com.ecommerce.event.display.controller;
 
 
 import com.ecommerce.event.display.model.EventContent;
+import com.ecommerce.event.display.model.request.EventComponentReqDto;
 import com.ecommerce.event.display.model.request.EventContentsReqDto;
 import com.ecommerce.event.display.model.request.EventExhibitionReqDto;
 import com.ecommerce.event.display.model.response.EventExhibitionResDto;
 import com.ecommerce.event.display.service.EventDisplayService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +22,35 @@ public class EventDisplayController {
     @Autowired
     public EventDisplayController(EventDisplayService eventDisplayService){
         this.eventDisplayService = eventDisplayService;
+    }
+
+    /*
+    전시구좌 생성
+     */
+    @PostMapping("/display/exhibition")
+    public ResponseEntity<?> createEventExhibition(@Valid @RequestBody EventExhibitionReqDto eventExhibitionReqDto){
+
+        return ResponseEntity.ok(eventDisplayService.createEventExhibition(eventExhibitionReqDto));
+    }
+
+    /*
+    컴포넌트 생성
+    */
+    @PostMapping("/display/component")
+    public ResponseEntity<?> createEventComponent(@Valid @RequestBody EventComponentReqDto eventComponentReqDto){
+
+
+        return ResponseEntity.ok(eventDisplayService.createEventComponent(eventComponentReqDto));
+    }
+
+    /*
+    컨텐츠 생성
+     */
+    @PostMapping("/display/content")
+    public ResponseEntity<?> createEventContent(@Valid @RequestBody EventContentsReqDto eventContentsReqDto){
+
+
+        return ResponseEntity.ok(eventDisplayService.createEventContent(eventContentsReqDto));
     }
 
     /*
